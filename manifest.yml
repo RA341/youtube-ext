@@ -1,0 +1,12 @@
+name: youtube
+
+owner: ra341
+
+version: v0.1.0
+
+repoUrl: https://github.com/RA341/youtube-ext
+
+scriptUrl: https://raw.githubusercontent.com/RA341/youtube-ext/main/youtube.py
+
+metaDataUrl: "https://raw.githubusercontent.com/RA341/youtube-ext/main/manifest.yaml
+
