@@ -8,5 +8,5 @@ repoUrl: https://github.com/RA341/youtube-ext
 
 scriptUrl: https://raw.githubusercontent.com/RA341/youtube-ext/main/youtube.py
 
-metaDataUrl: "https://raw.githubusercontent.com/RA341/youtube-ext/main/manifest.yaml
+metaDataUrl: https://raw.githubusercontent.com/RA341/youtube-ext/main/manifest.yaml
 
