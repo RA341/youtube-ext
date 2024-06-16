@@ -1,16 +1,62 @@
-# This is a sample Python script.
+from datetime import datetime, timedelta
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from pytube import Search, YouTube
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+home_query = 'full audio books'
 
 
-# Press the green button in the gutter to run the script.
+class YoutubeExtension:
+    search: Search | None = None
+
+    def home(self, paginate=False):
+        if paginate and self.search is not None:
+            self.search.get_next_results()
+            parse_youtube_search_results(self.search)
+            return
+
+        self.search = Search(home_query)
+        result = parse_youtube_search_results(self.search)
+        return result
+
+
+def parse_streams(video: YouTube):
+    expires = seconds_to_iso(int(video.streaming_data['expiresInSeconds']))
+    stream_url = video.streaming_data['formats'][-1]['url']
+    return stream_url, expires
+
+
+def parse_youtube_search_results(results: Search):
+    result_list = []
+    for video in results.results:
+        try:
+            video_data = parse_video(video)
+            streams = parse_streams(video)
+            video_data.update({'streams': streams[0], 'expires': streams[1]})
+            result_list.append(video_data)
+        except Exception as e:
+            print(e)
+            continue
+    return result_list
+
+
+def parse_video(video: YouTube):
+    return {'title': video.title, 'views': video.views, 'source_url': video.watch_url,
+            'release_date': video.publish_date.isoformat(), 'description': video.description,
+            'thumbnail_url': video.thumbnail_url, }
+
+
+def seconds_to_iso(seconds_until_expiry: int):
+    # Get the current date and time
+    current_time = datetime.now()
+    # Calculate the expiration date and time
+    expiration_time = current_time + timedelta(seconds=seconds_until_expiry)
+    # Convert to ISO 8601 format
+    iso_format = expiration_time.isoformat()
+    return iso_format
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    po = YouTube('https://www.youtube.com/watch?v=2lAe1cqCOXo')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    yt = YoutubeExtension()
+    print(yt.home())
