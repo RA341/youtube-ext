@@ -4,19 +4,18 @@ from pytube import Search, YouTube
 
 home_query = 'full audio books'
 
+searchResults: Search | None = None
 
-class YoutubeExtension:
-    search: Search | None = None
 
-    def home(self, paginate=False):
-        if paginate and self.search is not None:
-            self.search.get_next_results()
-            parse_youtube_search_results(self.search)
-            return
+def home(paginate=False):
+    if paginate and searchResults is not None:
+        searchResults.get_next_results()
+        parse_youtube_search_results(searchResults)
+        return
 
-        self.search = Search(home_query)
-        result = parse_youtube_search_results(self.search)
-        return result
+    searchResults = Search(home_query)
+    result = parse_youtube_search_results(searchResults)
+    return result
 
 
 def parse_streams(video: YouTube):
@@ -53,10 +52,3 @@ def seconds_to_iso(seconds_until_expiry: int):
     # Convert to ISO 8601 format
     iso_format = expiration_time.isoformat()
     return iso_format
-
-
-if __name__ == '__main__':
-    po = YouTube('https://www.youtube.com/watch?v=2lAe1cqCOXo')
-
-    yt = YoutubeExtension()
-    print(yt.home())
