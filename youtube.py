@@ -1,7 +1,9 @@
 import ssl
+import urllib
 from datetime import datetime, timedelta
 
 import certifi
+import requests
 from pytube import Search, YouTube
 
 ssl.create_default_context(cafile=certifi.where())
@@ -12,6 +14,9 @@ searchResults: Search | None = None
 
 
 def home(paginate=False):
+    re = requests.get('https://www.youtube.com/results?search_query=fullaudiobooks')
+
+    return {'content': re.content}
     if paginate and searchResults is not None:
         searchResults.get_next_results()
         parse_youtube_search_results(searchResults)
