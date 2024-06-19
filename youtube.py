@@ -1,6 +1,10 @@
+import ssl
 from datetime import datetime, timedelta
 
+import certifi
 from pytube import Search, YouTube
+
+ssl.create_default_context(cafile=certifi.where())
 
 home_query = 'full audio books'
 
