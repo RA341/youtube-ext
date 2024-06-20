@@ -2,9 +2,6 @@ import requests
 
 home_query = 'full audio books'
 
-# searchResults: Search | None = None
-
-
 def home(paginate=False):
     re = requests.get('https://www.youtube.com/results?search_query=fullaudiobooks')
 
